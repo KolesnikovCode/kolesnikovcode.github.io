@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/app.css"],"names":[],"mappings":"AAAA,UAEE,sBACF","file":"main.dd322167.chunk.css","sourcesContent":["html,\nbody {\n  scroll-behavior: smooth;\n}\n"]}
