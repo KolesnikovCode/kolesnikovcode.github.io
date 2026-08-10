@@ -380,7 +380,7 @@ function BusinessCardContent() {
 									</Text>
 									<Text fontSize={{ base: 'md', md: 'lg' }} color="fg.muted" lineHeight="1.75">
 										При необходимости пишу бэкенд на Node.js и Go. Для себя изучал Rust, на C++
-										иногда делаю VST-плагины — для удовольствия.
+										иногда делаю VST-плагины в своё удовольствие.
 									</Text>
 
 									<SimpleGrid
