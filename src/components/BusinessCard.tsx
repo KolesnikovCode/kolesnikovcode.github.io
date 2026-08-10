@@ -197,8 +197,11 @@ function BusinessCardContent() {
 							href="/cv.pdf"
 							target="_blank"
 							rel="noopener noreferrer"
+							fontFamily="heading"
 							fontSize="sm"
-							color="fg.muted"
+							fontWeight="700"
+							letterSpacing="0.04em"
+							color="brand.fg"
 							_hover={{ color: 'brand.solid' }}
 							transition="color 0.2s"
 						>
@@ -216,60 +219,89 @@ function BusinessCardContent() {
 					pb={{ base: 16, md: 20 }}
 				>
 					<Container maxW="8xl" px={0}>
-						<Flex
-							align="center"
-							justify="space-between"
-							gap={{ base: 10, lg: 12 }}
-							direction={{ base: 'column-reverse', lg: 'row' }}
-						>
-							<Stack gap={{ base: 7, md: 9 }} maxW={{ base: '100%', lg: '58%' }} flex="1">
-								<MotionDiv {...fadeUp(0.05)}>
+						<Stack gap={{ base: 7, md: 9 }} maxW={{ base: '100%', lg: '72%' }}>
+							<MotionDiv {...fadeUp(0.05)}>
+								<Flex
+									direction={{ base: 'column', md: 'row' }}
+									align={{ base: 'center', md: 'center' }}
+									gap={{ base: 6, md: 0 }}
+								>
+									<Box
+										as="div"
+										role="img"
+										aria-label="Юрий Колесников"
+										flexShrink={0}
+										mr={{ base: 0, md: 8 }}
+										w={{ base: '220px', sm: '240px', md: '180px', lg: '200px' }}
+										h={{ base: '220px', sm: '240px', md: '180px', lg: '200px' }}
+										borderRadius="full"
+										border="1px solid"
+										borderColor="border"
+										boxShadow="0 0 0 1px rgba(61, 217, 197, 0.18), 0 24px 80px rgba(0, 0, 0, 0.45)"
+										style={{
+											backgroundImage: 'url(/photo.jpg)',
+											backgroundSize: 'cover',
+											backgroundRepeat: 'no-repeat',
+											backgroundPosition: 'center center',
+										}}
+									/>
 									<Heading
 										as="h1"
 										fontFamily="heading"
 										fontWeight="800"
 										letterSpacing="-0.06em"
 										lineHeight="0.92"
-										fontSize={{ base: '3.4rem', sm: '4.5rem', md: '5.5rem', lg: '6.5rem' }}
+										fontSize={{ base: '3.4rem', sm: '4.5rem', md: '5rem', lg: '6rem' }}
 										color="fg"
+										textAlign={{ base: 'center', md: 'left' }}
 										overflowWrap="normal"
 										wordBreak="keep-all"
 										hyphens="none"
 									>
-										Юрий{' '}
-										<Box as="span" whiteSpace="nowrap">
-											Колесников
-										</Box>
+										Юрий
+										<br />
+										Колесников
 									</Heading>
-								</MotionDiv>
+								</Flex>
+							</MotionDiv>
 
-								<MotionDiv {...fadeUp(0.18)}>
-									<Text
-										fontFamily="heading"
-										fontWeight="600"
-										fontSize={{ base: 'xl', md: '2xl' }}
-										letterSpacing="-0.02em"
-										color="brand.fg"
-									>
-										Head of Frontend · Lead Engineer
-									</Text>
-								</MotionDiv>
+							<MotionDiv {...fadeUp(0.18)}>
+								<Text
+									fontFamily="heading"
+									fontWeight="600"
+									fontSize={{ base: 'xl', md: '2xl' }}
+									letterSpacing="-0.02em"
+									color="brand.fg"
+									textAlign={{ base: 'center', md: 'left' }}
+								>
+									Head of Frontend · Lead Engineer
+								</Text>
+							</MotionDiv>
 
-								<MotionDiv {...fadeUp(0.28)}>
-									<Text
-										fontSize={{ base: 'md', md: 'lg' }}
-										color="fg.muted"
-										maxW="34rem"
-										lineHeight="1.7"
-									>
-										Строю архитектуру фронтенда, команды и процессы — React, Vue и TypeScript
-										в масштабе продуктов.
-									</Text>
-								</MotionDiv>
+							<MotionDiv {...fadeUp(0.28)}>
+								<Text
+									fontSize={{ base: 'md', md: 'lg' }}
+									color="fg.muted"
+									maxW="34rem"
+									mx={{ base: 'auto', md: 0 }}
+									lineHeight="1.7"
+									textAlign={{ base: 'center', md: 'left' }}
+								>
+									Строю архитектуру фронтенда, команды и процессы — React, Vue и TypeScript
+									в масштабе продуктов.
+								</Text>
+							</MotionDiv>
 
-								<MotionDiv
-									{...fadeUp(0.4)}
-									style={{ display: 'flex', gap: 12, flexWrap: 'wrap', paddingTop: 8 }}
+							<MotionDiv
+								{...fadeUp(0.4)}
+								style={{ display: 'flex', gap: 12, flexWrap: 'wrap', paddingTop: 8 }}
+							>
+								<Box
+									display="flex"
+									gap={3}
+									flexWrap="wrap"
+									justifyContent={{ base: 'center', md: 'flex-start' }}
+									w="100%"
 								>
 									<Button
 										asChild
@@ -295,32 +327,9 @@ function BusinessCardContent() {
 									>
 										<a href="#about">Обо мне</a>
 									</Button>
-								</MotionDiv>
-							</Stack>
-
-							<MotionDiv
-								{...fadeUp(0.22)}
-								style={{ flexShrink: 0 }}
-							>
-								<Box
-									as="div"
-									role="img"
-									aria-label="Юрий Колесников"
-									w={{ base: '220px', sm: '280px', md: '320px', lg: '360px' }}
-									h={{ base: '220px', sm: '280px', md: '320px', lg: '360px' }}
-									borderRadius="full"
-									border="1px solid"
-									borderColor="border"
-									boxShadow="0 0 0 1px rgba(61, 217, 197, 0.18), 0 24px 80px rgba(0, 0, 0, 0.45)"
-									style={{
-										backgroundImage: 'url(/photo.jpg)',
-										backgroundSize: 'cover',
-										backgroundRepeat: 'no-repeat',
-										backgroundPosition: 'center center',
-									}}
-								/>
+								</Box>
 							</MotionDiv>
-						</Flex>
+						</Stack>
 					</Container>
 				</Box>
 
@@ -485,13 +494,21 @@ function BusinessCardContent() {
 											target={contact.href.startsWith('http') ? '_blank' : undefined}
 											rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
 											display="block"
+											h="100%"
 											p={{ base: 5, md: 6 }}
-											borderBottom="1px solid"
+											borderRadius="xl"
+											border="1px solid"
 											borderColor="border"
-											_hover={{ borderColor: 'brand.solid', color: 'brand.fg' }}
-											transition="border-color 0.2s, color 0.2s"
+											bg="whiteAlpha.50"
+											backdropFilter="blur(8px)"
 											textDecoration="none"
 											color="inherit"
+											transition="background 0.2s, border-color 0.2s, color 0.2s"
+											_hover={{
+												bg: 'whiteAlpha.100',
+												borderColor: 'brand.solid',
+												color: 'brand.fg',
+											}}
 										>
 											<Flex align="center" gap={3} mb={4} color="brand.fg">
 												{contactIcons[contact.label]}
@@ -512,10 +529,11 @@ function BusinessCardContent() {
 												letterSpacing="-0.02em"
 												mb={2}
 												wordBreak="break-word"
+												color="fg"
 											>
 												{contact.value}
 											</Text>
-											<Text fontSize="sm" color="fg.subtle">
+											<Text fontSize="sm" color="fg.muted">
 												{contact.hint}
 											</Text>
 										</Link>
