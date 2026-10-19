@@ -303,14 +303,15 @@ function BusinessCardContent({ locale }: { locale: Locale }) {
 										as="h1"
 										fontFamily="heading"
 										fontWeight="800"
-										letterSpacing="-0.06em"
+										letterSpacing={{ base: '-0.04em', md: '-0.06em' }}
 										lineHeight="0.92"
-										fontSize={{ base: '3.4rem', sm: '4.5rem', md: '5rem', lg: '6rem' }}
+										fontSize="clamp(2.35rem, 9.2vw, 6rem)"
 										color="fg"
 										textAlign={{ base: 'center', md: 'left' }}
 										overflowWrap="normal"
 										wordBreak="keep-all"
 										hyphens="none"
+										maxW="100%"
 									>
 										{t.firstName}
 										<br />
