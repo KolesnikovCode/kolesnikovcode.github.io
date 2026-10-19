@@ -1,17 +1,33 @@
+---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../i18n/ui';
+import { getUi } from '../i18n/ui';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getUi(locale);
+const site = Astro.site ?? new URL('https://kolesnikovcode.github.io');
+const ruUrl = new URL(getAbsoluteLocaleUrl('ru'), site).href;
+const enUrl = new URL(getAbsoluteLocaleUrl('en'), site).href;
+---
+
 <!doctype html>
-<html lang="ru" class="dark">
+<html lang={locale} class="dark">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<meta
-			name="description"
-			content="Юрий Колесников — Head of Frontend / Lead Frontend Engineer. React, Vue, TypeScript."
-		/>
+		<meta name="description" content={t.metaDescription} />
 		<link rel="sitemap" href="/sitemap-index.xml" />
-		<title>Kolesnikov — Head of Frontend</title>
+		<link rel="alternate" hreflang="ru" href={ruUrl} />
+		<link rel="alternate" hreflang="en" href={enUrl} />
+		<link rel="alternate" hreflang="x-default" href={ruUrl} />
+		<title>{t.metaTitle}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link

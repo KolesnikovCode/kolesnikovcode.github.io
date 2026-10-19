@@ -7,4 +7,11 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
 	site: 'https://kolesnikovcode.github.io',
 	integrations: [react(), sitemap()],
+	i18n: {
+		defaultLocale: 'ru',
+		locales: ['ru', 'en'],
+		routing: {
+			prefixDefaultLocale: false,
+		},
+	},
 });

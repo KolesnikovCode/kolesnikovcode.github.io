@@ -11,32 +11,38 @@ import {
 } from '@chakra-ui/react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { lazy, Suspense, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { getCvHref, getLocalePath, getUi, type ContactId, type Locale } from '../i18n/ui';
 import { Provider } from './ui/provider';
 
 const Scene3D = lazy(() => import('./Scene3D'));
 
 const MotionDiv = motion.div;
 
-const contacts = [
+const contactBase: Array<{
+	id: ContactId;
+	label: string;
+	value: string;
+	href: string;
+}> = [
 	{
+		id: 'email',
 		label: 'Email',
 		value: 'yuri.kolesnikov.dev@gmail.com',
 		href: 'mailto:yuri.kolesnikov.dev@gmail.com',
-		hint: 'Предпочитаемый способ связи',
 	},
 	{
+		id: 'telegram',
 		label: 'Telegram',
 		value: '@kolesnikov_dev',
 		href: 'https://t.me/kolesnikov_dev',
-		hint: 'Быстрые сообщения',
 	},
 	{
+		id: 'github',
 		label: 'GitHub',
 		value: 'KolesnikovCode',
 		href: 'https://github.com/KolesnikovCode',
-		hint: 'Код и эксперименты',
 	},
-] as const;
+];
 
 function MailIcon() {
 	return (
@@ -78,10 +84,10 @@ function GitHubIcon() {
 	);
 }
 
-const contactIcons: Record<(typeof contacts)[number]['label'], ReactNode> = {
-	Email: <MailIcon />,
-	Telegram: <TelegramIcon />,
-	GitHub: <GitHubIcon />,
+const contactIcons: Record<ContactId, ReactNode> = {
+	email: <MailIcon />,
+	telegram: <TelegramIcon />,
+	github: <GitHubIcon />,
 };
 
 function SceneFallback() {
@@ -94,7 +100,47 @@ function SceneFallback() {
 	);
 }
 
-function BusinessCardContent() {
+function LanguageSwitch({ locale }: { locale: Locale }) {
+	const t = getUi(locale);
+
+	return (
+		<Flex
+			as="nav"
+			align="center"
+			gap={2}
+			aria-label={t.langSwitcherLabel}
+			fontFamily="heading"
+			fontSize="sm"
+			fontWeight="700"
+			letterSpacing="0.04em"
+		>
+			<Link
+				href={getLocalePath('ru')}
+				color={locale === 'ru' ? 'brand.solid' : 'fg.muted'}
+				textDecoration="none"
+				_hover={{ color: 'brand.solid' }}
+				aria-current={locale === 'ru' ? 'page' : undefined}
+			>
+				{t.langRu}
+			</Link>
+			<Text color="fg.subtle" aria-hidden="true">
+				|
+			</Text>
+			<Link
+				href={getLocalePath('en')}
+				color={locale === 'en' ? 'brand.solid' : 'fg.muted'}
+				textDecoration="none"
+				_hover={{ color: 'brand.solid' }}
+				aria-current={locale === 'en' ? 'page' : undefined}
+			>
+				{t.langEn}
+			</Link>
+		</Flex>
+	);
+}
+
+function BusinessCardContent({ locale }: { locale: Locale }) {
+	const t = getUi(locale);
 	const reduceMotion = useReducedMotion();
 	const [mounted, setMounted] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
@@ -130,6 +176,11 @@ function BusinessCardContent() {
 					viewport: { once: true, amount: 0.35 },
 					transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
 				};
+
+	const contacts = contactBase.map((contact) => ({
+		...contact,
+		hint: t.contactHints[contact.id],
+	}));
 
 	return (
 		<Box minH="100vh" bg="bg" color="fg" position="relative" overflow="hidden">
@@ -175,7 +226,7 @@ function BusinessCardContent() {
 					borderColor={scrolled ? 'border' : 'transparent'}
 					transition="background 0.25s ease, border-color 0.25s ease"
 				>
-					<Flex align="center" justify="space-between" maxW="8xl" mx="auto" w="100%">
+					<Flex align="center" justify="space-between" maxW="8xl" mx="auto" w="100%" gap={4}>
 						<Link
 							href="#top"
 							fontFamily="heading"
@@ -193,20 +244,23 @@ function BusinessCardContent() {
 						>
 							kolesnikov.code
 						</Link>
-						<Link
-							href="/cv.pdf"
-							target="_blank"
-							rel="noopener noreferrer"
-							fontFamily="heading"
-							fontSize="sm"
-							fontWeight="700"
-							letterSpacing="0.04em"
-							color="brand.fg"
-							_hover={{ color: 'brand.solid' }}
-							transition="color 0.2s"
-						>
-							CV (PDF)
-						</Link>
+						<Flex align="center" gap={{ base: 4, md: 6 }}>
+							<LanguageSwitch locale={locale} />
+							<Link
+								href={getCvHref(locale)}
+								target="_blank"
+								rel="noopener noreferrer"
+								fontFamily="heading"
+								fontSize="sm"
+								fontWeight="700"
+								letterSpacing="0.04em"
+								color="brand.fg"
+								_hover={{ color: 'brand.solid' }}
+								transition="color 0.2s"
+							>
+								CV (PDF)
+							</Link>
+						</Flex>
 					</Flex>
 				</Box>
 
@@ -229,7 +283,7 @@ function BusinessCardContent() {
 									<Box
 										as="div"
 										role="img"
-										aria-label="Юрий Колесников"
+										aria-label={t.photoAlt}
 										flexShrink={0}
 										mr={{ base: 0, md: 8 }}
 										w={{ base: '220px', sm: '240px', md: '180px', lg: '200px' }}
@@ -258,9 +312,9 @@ function BusinessCardContent() {
 										wordBreak="keep-all"
 										hyphens="none"
 									>
-										Юрий
+										{t.firstName}
 										<br />
-										Колесников
+										{t.lastName}
 									</Heading>
 								</Flex>
 							</MotionDiv>
@@ -274,7 +328,7 @@ function BusinessCardContent() {
 									color="brand.fg"
 									textAlign={{ base: 'center', md: 'left' }}
 								>
-									Head of Frontend · Lead Engineer
+									{t.role}
 								</Text>
 							</MotionDiv>
 
@@ -287,8 +341,7 @@ function BusinessCardContent() {
 									lineHeight="1.7"
 									textAlign={{ base: 'center', md: 'left' }}
 								>
-									Строю архитектуру фронтенда, команды и процессы — React, Vue и TypeScript
-									в масштабе продуктов.
+									{t.heroLead}
 								</Text>
 							</MotionDiv>
 
@@ -313,7 +366,7 @@ function BusinessCardContent() {
 										_hover={{ opacity: 0.92, transform: 'translateY(-1px)' }}
 										transition="all 0.2s"
 									>
-										<a href="#contacts">Связаться</a>
+										<a href="#contacts">{t.ctaContact}</a>
 									</Button>
 									<Button
 										asChild
@@ -325,7 +378,7 @@ function BusinessCardContent() {
 										px={7}
 										_hover={{ borderColor: 'brand.solid', color: 'brand.fg' }}
 									>
-										<a href="#about">Обо мне</a>
+										<a href="#about">{t.ctaAbout}</a>
 									</Button>
 								</Box>
 							</MotionDiv>
@@ -352,7 +405,7 @@ function BusinessCardContent() {
 									color="brand.fg"
 									mb={3}
 								>
-									Обо мне
+									{t.aboutEyebrow}
 								</Text>
 								<Heading
 									as="h2"
@@ -362,34 +415,27 @@ function BusinessCardContent() {
 									fontSize={{ base: '2.4rem', md: '3rem' }}
 									lineHeight="1.05"
 								>
-									Системы, люди
+									{t.aboutTitleLine1}
 									<br />
-									и интерфейсы
+									{t.aboutTitleLine2}
 								</Heading>
 							</MotionDiv>
 
 							<MotionDiv {...fadeInView(0.12)}>
 								<Stack gap={5}>
 									<Text fontSize={{ base: 'md', md: 'lg' }} color="fg.muted" lineHeight="1.75">
-										Head of Frontend с 7+ годами опыта. React/Next, Vue/Nuxt, TypeScript —
-										архитектура SPA/SSR и Developer Experience.
+										{t.aboutP1}
 									</Text>
 									<Text fontSize={{ base: 'md', md: 'lg' }} color="fg.muted" lineHeight="1.75">
-										Сейчас руковожу фронтендом в А7-Технологии: стратегия, стандарты, менторинг
-										лидов и процессы.
+										{t.aboutP2Lead}
 										<br />
-										Раньше — Lead в IPChain, стриминговой медиаплатформе TeleSport и Kaspersky
-										Container Security.
+										{t.aboutP2Past}
 									</Text>
 									<Text fontSize={{ base: 'md', md: 'lg' }} color="fg.muted" lineHeight="1.75">
-										Собирал HLS-плееры и WebRTC для live-видео, а также кастомные аудиоплееры с
-										анализом звука и отрисовкой волноформы. Был опыт в web3 и трейдинге:
-										высокопроизводительный интерфейс, который слушал десятки и сотни событий в
-										секунду.
+										{t.aboutP3}
 									</Text>
 									<Text fontSize={{ base: 'md', md: 'lg' }} color="fg.muted" lineHeight="1.75">
-										При необходимости пишу бэкенд на Node.js и Go. Для себя изучал Rust, на C++
-										иногда делаю VST-плагины в своё удовольствие.
+										{t.aboutP4}
 									</Text>
 
 									<SimpleGrid
@@ -402,8 +448,8 @@ function BusinessCardContent() {
 									>
 										{(
 											[
-												{ label: 'Локация', value: 'Москва' },
-												{ label: 'Хобби', value: 'Мотоциклы и звукорежиссура' },
+												{ label: t.metaLocationLabel, value: t.metaLocationValue },
+												{ label: t.metaHobbyLabel, value: t.metaHobbyValue },
 											] as const
 										).map((item) => (
 											<Box key={item.label}>
@@ -450,7 +496,7 @@ function BusinessCardContent() {
 									color="brand.fg"
 									mb={3}
 								>
-									Контакты
+									{t.contactsEyebrow}
 								</Text>
 								<Heading
 									as="h2"
@@ -461,18 +507,17 @@ function BusinessCardContent() {
 									lineHeight="1.05"
 									mb={4}
 								>
-									Открыт к диалогу
+									{t.contactsTitle}
 								</Heading>
 								<Text color="fg.muted" fontSize={{ base: 'md', md: 'lg' }} lineHeight="1.7">
-									Пишите на почту или в Telegram — отвечу по сотрудничеству, менторству и
-									техническому лидерству.
+									{t.contactsLead}
 								</Text>
 							</MotionDiv>
 
 							<SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
 								{contacts.map((contact, index) => (
 									<MotionDiv
-										key={contact.label}
+										key={contact.id}
 										initial={reduceMotion ? false : { opacity: 0, y: 20 }}
 										whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
 										viewport={{ once: true, amount: 0.4 }}
@@ -511,7 +556,7 @@ function BusinessCardContent() {
 											}}
 										>
 											<Flex align="center" gap={3} mb={4} color="brand.fg">
-												{contactIcons[contact.label]}
+												{contactIcons[contact.id]}
 												<Text
 													fontFamily="heading"
 													fontWeight="700"
@@ -554,7 +599,7 @@ function BusinessCardContent() {
 						textAlign="center"
 					>
 						<Text fontSize="sm" color="fg.subtle">
-							© {new Date().getFullYear()} Юрий Колесников
+							© {new Date().getFullYear()} {t.footerName}
 						</Text>
 					</Box>
 				</Box>
@@ -563,10 +608,10 @@ function BusinessCardContent() {
 	);
 }
 
-export default function BusinessCard() {
+export default function BusinessCard({ locale = 'ru' }: { locale?: Locale }) {
 	return (
 		<Provider>
-			<BusinessCardContent />
+			<BusinessCardContent locale={locale} />
 		</Provider>
 	);
 }
